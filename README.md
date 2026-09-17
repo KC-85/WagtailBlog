@@ -1,0 +1,2 @@
+# WagtailBlog
+Learning wagtail walkthrough
