@@ -185,3 +185,5 @@ WAGTAILDOCS_EXTENSIONS = ['csv', 'docx', 'key', 'odt', 'pdf', 'pptx', 'rtf', 'tx
 WAGTAILDOCS_MAX_UPLOAD_SIZE = 10 * 1024 * 1024  # 10MB
 
 WAGTAILIMAGES_IMAGE_MODEL = 'images.CustomImage'
+
+WAGTAILIMAGES_EXTENSIONS = ['bmp', 'gif', 'jpeg', 'jpg', 'png', 'tiff', 'webp', 'svg']

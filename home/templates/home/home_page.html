@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load wagtailcore_tags %}
+{% load wagtailcore_tags wagtailimages_tags %}
 {% load static %}
 
 {% block content %}   
@@ -9,5 +9,20 @@
     {% if page.body %}
         {{ page.body|richtext }}
     {% endif %}
+
+    <hr>
+    <hr>
+    <hr>
+    <hr>
+
+    {% image page.image fill-150x150 format-jpeg %}
+    {% image page.image width-400 %}
+    {% image page.image width-400 format-avif-lossless %}
+    {% image page.image width-400 format-webp-lossless %}
+
+    {% image page.image fill-90x200 as custom_img %}
+    {{ custom_img.url }}
+    {{ custom_img.width }}
+    {{ custom_img.height }}
 
 {% endblock content %}
