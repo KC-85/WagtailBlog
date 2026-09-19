@@ -22,7 +22,10 @@
 
     {% image page.image fill-90x200 as custom_img %}
     {{ custom_img.url }}
-    {{ custom_img.width }}
-    {{ custom_img.height }}
+
+    <h3>Dynamic Image URL served below</h3>
+    {% image_url page.image "fill-150x150|jpegquality-100" as custom_img2 %}
+    {{ custom_img2 }}
+    <img src="{{ custom_img2 }}" alt="Dynamic Image URL">
 
 {% endblock content %}
