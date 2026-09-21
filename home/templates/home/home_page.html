@@ -15,6 +15,7 @@
     <hr>
     <hr>
 
+<!-- Image renditions -->
     {% image page.image fill-150x150 format-jpeg %}
     {% image page.image width-400 %}
     {% image page.image width-400 format-avif-lossless %}
@@ -27,5 +28,11 @@
     {% image_url page.image "fill-150x150|jpegquality-100" as custom_img2 %}
     {{ custom_img2 }}
     <img src="{{ custom_img2 }}" alt="Dynamic Image URL">
+
+<!-- Document download link -->
+    {% if page.custom_document %}
+    <a href="{{ page.custom_document.url }}" download>{{ page.custom_document.title }}</a>
+    {% endif %}
+
 
 {% endblock content %}
