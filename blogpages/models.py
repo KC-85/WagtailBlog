@@ -6,9 +6,10 @@ from wagtail.admin.panels import FieldPanel
 
 
 class BlogIndex(Page):
-    # Listing page of all child pages.
-
     template = "blogpages/blog_index_page.html"
+    max_count = 1  # Limit to one instance of this page type.
+    parent_page_types = ["home.HomePage"]
+    subpage_types = ["blogpages.BlogDetail"]
 
     subtitle = models.CharField(max_length=100, blank=True)
     body = RichTextField(blank=True)
@@ -20,12 +21,12 @@ class BlogIndex(Page):
 
 
 class BlogDetail(Page):
-    # Detail page for individual blog posts.
-
     template = "blogpages/blog_detail_page.html"
 
     subtitle = models.CharField(max_length=100, blank=True)
     body = RichTextField(blank=True)
+    parent_page_types = ["blogpages.BlogIndex"]
+    subpage_types = []
 
     content_panels = Page.content_panels + [
         FieldPanel("subtitle"),
