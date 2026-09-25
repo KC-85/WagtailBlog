@@ -29,7 +29,10 @@ class BlogIndex(Page):
 
 class BlogDetail(Page):
     subtitle = models.CharField(max_length=100, blank=True)
-    body = RichTextField(blank=True)
+    body = RichTextField(
+        blank=True,
+        features=["blockquote", "h3", "image", "ul", "strikethrough"]
+    )
     parent_page_types = ["blogpages.BlogIndex"]
     subpage_types = []
 
@@ -50,24 +53,16 @@ class BlogDetail(Page):
     def clean(self):
         super().clean()
 
-        body_text = str(self.body).strip()
-        validation_rules = (
-            (
-                "subtitle",
-                bool(self.title and self.subtitle and self.title == self.subtitle),
-                "The subtitle cannot be the same as the title.",
-            ),
-            (
-                "body",
-                bool(self.subtitle and body_text and body_text == self.subtitle),
-                "The body cannot be the same as the subtitle.",
-            ),
-        )
-        errors = {
-            field: ValidationError(message)
-            for field, invalid, message in validation_rules
-            if invalid
-        }
+        errors = {}
+
+        if 'blog' in self.title.lower():
+            errors['title'] = "The title cannot contain the word 'blog'."
+
+        if 'blog' in self.subtitle.lower():
+            errors['subtitle'] = "The subtitle cannot contain the word 'blog'."
+
+        if 'blog' in self.slug.lower():
+            errors['slug'] = "The slug cannot contain the word 'blog'."
 
         if errors:
             raise ValidationError(errors)
