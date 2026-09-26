@@ -25,7 +25,18 @@ class BlogIndex(Page):
         context["blogpages"] = BlogDetail.objects.live().public()
         return context
 
+from modelcluster.fields import ParentalKey
+from modelcluster.contrib.taggit import ClusterTaggableManager
+from taggit.models import TaggedItemBase
 
+
+
+class BlogPageTags(TaggedItemBase):
+    content_object = ParentalKey(
+        "blogpages.BlogDetail",
+        on_delete=models.CASCADE,
+        related_name="tagged_items",
+    )
 
 class BlogDetail(Page):
     subtitle = models.CharField(max_length=100, blank=True)
@@ -33,6 +44,9 @@ class BlogDetail(Page):
         blank=True,
         features=["blockquote", "h3", "image", "ul", "strikethrough"]
     )
+    tags = ClusterTaggableManager(through=BlogPageTags, blank=True)
+
+
     parent_page_types = ["blogpages.BlogIndex"]
     subpage_types = []
 
@@ -48,6 +62,7 @@ class BlogDetail(Page):
         FieldPanel("subtitle"),
         FieldPanel("body"),
         FieldPanel("image"),
+        FieldPanel("tags"),
     ]
 
     def clean(self):
