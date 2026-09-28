@@ -41,6 +41,7 @@ class BlogPageTags(TaggedItemBase):
 from wagtail.fields import StreamField
 from wagtail.blocks import TextBlock
 from wagtail.images.blocks import ImageChooserBlock
+from wagtail import blocks
 
 class BlogDetail(Page):
     subtitle = models.CharField(max_length=100, blank=True)
@@ -50,6 +51,17 @@ class BlogDetail(Page):
         [
             ("text", TextBlock()),
             ("image", ImageChooserBlock()),
+            ("carousel", blocks.StreamBlock(
+                [
+                    ("image", ImageChooserBlock()),
+                    ("quotation", blocks.StructBlock(
+                        [
+                            ("text", TextBlock()),
+                            ("author", TextBlock()),
+                        ]
+                    ))
+                ]
+            ))
         ],
         block_counts={
             "text": {"max_num": 5},
