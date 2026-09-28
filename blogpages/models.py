@@ -38,15 +38,27 @@ class BlogPageTags(TaggedItemBase):
         related_name="tagged_items",
     )
 
+from wagtail.fields import StreamField
+from wagtail.blocks import TextBlock
+from wagtail.images.blocks import ImageChooserBlock
+
 class BlogDetail(Page):
     subtitle = models.CharField(max_length=100, blank=True)
-    body = RichTextField(
-        blank=True,
-        features=["blockquote", "h3", "image", "ul", "strikethrough"]
-    )
     tags = ClusterTaggableManager(through=BlogPageTags, blank=True)
 
-
+    body = StreamField(
+        [
+            ("text", TextBlock()),
+            ("image", ImageChooserBlock()),
+        ],
+        block_counts={
+            "text": {"max_num": 5},
+            "image": {"max_num": 3},
+        },
+        use_json_field=True,
+        blank=True,
+        null=True,
+    )
     parent_page_types = ["blogpages.BlogIndex"]
     subpage_types = []
 
@@ -60,9 +72,9 @@ class BlogDetail(Page):
 
     content_panels = Page.content_panels + [
         FieldPanel("subtitle"),
+        FieldPanel("tags"),
         FieldPanel("body"),
         FieldPanel("image"),
-        FieldPanel("tags"),
     ]
 
     def clean(self):
