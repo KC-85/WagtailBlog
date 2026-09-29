@@ -4,6 +4,21 @@ from django.core.exceptions import ValidationError
 from wagtail.models import Page
 from wagtail.fields import RichTextField
 from wagtail.admin.panels import FieldPanel
+from wagtail.snippets.models import register_snippet
+
+
+@register_snippet
+class Author(models.Model):
+    name = models.CharField(max_length=255)
+    bio = models.TextField(blank=True)
+
+    panels = [
+        FieldPanel("name"),
+        FieldPanel("bio"),
+    ]
+
+    def __str__(self):
+        return self.name
 
 
 class BlogIndex(Page):
@@ -41,6 +56,8 @@ class BlogPageTags(TaggedItemBase):
 from wagtail.fields import StreamField
 from wagtail.blocks import TextBlock
 from wagtail.images.blocks import ImageChooserBlock
+from wagtail.documents.blocks import DocumentChooserBlock
+from wagtail.snippets.blocks import SnippetChooserBlock
 from wagtail import blocks
 
 class BlogDetail(Page):
@@ -49,22 +66,31 @@ class BlogDetail(Page):
 
     body = StreamField(
         [
-            ("text", TextBlock()),
-            ("image", ImageChooserBlock()),
-            ("carousel", blocks.StreamBlock(
+            ('page', blocks.PageChooserBlock(
+                required=False,
+                page_type="home.HomePage"
+            )),
+            ('image', ImageChooserBlock()),
+            ('document', DocumentChooserBlock()),
+            ('author_profile', SnippetChooserBlock('blogpages.Author')),
+
+            ("call_to_action_1", blocks.StructBlock(
                 [
-                    ("image", ImageChooserBlock()),
-                    ("quotation", blocks.StructBlock(
-                        [
-                            ("text", TextBlock()),
-                            ("author", TextBlock()),
-                        ]
-                    ))
-                ]
+                    ("text", blocks.RichTextBlock(
+                        features=["bold", "italic"],
+                        required=True,
+                    )),
+                    ("page", blocks.PageChooserBlock()),
+                    ("button_text", blocks.CharBlock(
+                        max_length=50,
+                        required=False,
+                    )),
+                ],
+                label="CTA #1"
             ))
         ],
         block_counts={
-            "text": {"max_num": 5},
+            #"text": {"max_num": 5},
             "image": {"max_num": 3},
         },
         use_json_field=True,
