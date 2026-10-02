@@ -70,6 +70,21 @@ class BlogDetail(Page):
                 required=False,
                 page_type="home.HomePage"
             )),
+            ("info", blocks.StaticBlock(
+                admin_text="Content divider with extra information",
+            )),
+            ("faq", blocks.ListBlock(
+                blocks.StructBlock([
+                    ("question", blocks.CharBlock()),
+                    ("answer", blocks.RichTextBlock(
+                        features=["bold", "italic"],
+                        required=True,
+                    )),
+                ]),
+                min_num=1,
+                max_num=5,
+                label="Frequently Asked Questions"
+            )),  
             ('image', ImageChooserBlock()),
             ('document', DocumentChooserBlock()),
             ('author_profile', SnippetChooserBlock('blogpages.Author')),
