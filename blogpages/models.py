@@ -60,6 +60,8 @@ from wagtail.documents.blocks import DocumentChooserBlock
 from wagtail.snippets.blocks import SnippetChooserBlock
 from wagtail import blocks
 
+from blocks import blocks as custom_blocks
+
 class BlogDetail(Page):
     subtitle = models.CharField(max_length=100, blank=True)
     tags = ClusterTaggableManager(through=BlogPageTags, blank=True)
@@ -70,21 +72,9 @@ class BlogDetail(Page):
                 required=False,
                 page_type="home.HomePage"
             )),
-            ("info", blocks.StaticBlock(
-                admin_text="Content divider with extra information",
-            )),
-            ("faq", blocks.ListBlock(
-                blocks.StructBlock([
-                    ("question", blocks.CharBlock()),
-                    ("answer", blocks.RichTextBlock(
-                        features=["bold", "italic"],
-                        required=True,
-                    )),
-                ]),
-                min_num=1,
-                max_num=5,
-                label="Frequently Asked Questions"
-            )),  
+            ("info", custom_blocks.InfoBlock()),
+            ("faq", custom_blocks.FAQListBlock()),
+            ('text', custom_blocks.TextBlock()), 
             ('image', ImageChooserBlock()),
             ('document', DocumentChooserBlock()),
             ('author_profile', SnippetChooserBlock('blogpages.Author')),
