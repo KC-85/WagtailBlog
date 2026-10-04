@@ -53,3 +53,25 @@ class CarouselBlock(blocks.StreamBlock):
         ]
     )
 
+
+class CallToActionBlock(blocks.StructBlock):
+    text = blocks.RichTextBlock(
+        features=["bold", "italic"],
+        required=True,
+    )
+    page = blocks.PageChooserBlock()
+    button_text = blocks.CharBlock(
+        max_length=50,
+        required=False,
+    )
+
+    class Meta:
+        label = "CTA #1"
+
+
+class ImageBlock(ImageChooserBlock):
+
+    class Meta:
+        template = "..."
+
+
