@@ -6,6 +6,13 @@ from wagtail.fields import RichTextField
 from wagtail.admin.panels import FieldPanel
 from wagtail.snippets.models import register_snippet
 
+from wagtail.fields import StreamField
+from wagtail.documents.blocks import DocumentChooserBlock
+from wagtail.snippets.blocks import SnippetChooserBlock
+from wagtail import blocks
+
+from blocks import blocks as custom_blocks
+
 
 @register_snippet
 class Author(models.Model):
@@ -53,14 +60,6 @@ class BlogPageTags(TaggedItemBase):
         related_name="tagged_items",
     )
 
-from wagtail.fields import StreamField
-from wagtail.blocks import TextBlock
-from wagtail.images.blocks import ImageChooserBlock
-from wagtail.documents.blocks import DocumentChooserBlock
-from wagtail.snippets.blocks import SnippetChooserBlock
-from wagtail import blocks
-
-from blocks import blocks as custom_blocks
 
 class BlogDetail(Page):
     subtitle = models.CharField(max_length=100, blank=True)
@@ -75,24 +74,13 @@ class BlogDetail(Page):
             ("info", custom_blocks.InfoBlock()),
             ("faq", custom_blocks.FAQListBlock()),
             ('text', custom_blocks.TextBlock()), 
-            ('image', ImageChooserBlock()),
+            ('image', custom_blocks.ImageBlock()),
             ('document', DocumentChooserBlock()),
             ('author_profile', SnippetChooserBlock('blogpages.Author')),
 
-            ("call_to_action_1", blocks.StructBlock(
-                [
-                    ("text", blocks.RichTextBlock(
-                        features=["bold", "italic"],
-                        required=True,
-                    )),
-                    ("page", blocks.PageChooserBlock()),
-                    ("button_text", blocks.CharBlock(
-                        max_length=50,
-                        required=False,
-                    )),
-                ],
-                label="CTA #1"
-            ))
+            ("carousel", custom_blocks.CarouselBlock()),
+
+            ("call_to_action_1", custom_blocks.CallToActionBlock()),   
         ],
         block_counts={
             #"text": {"max_num": 5},
