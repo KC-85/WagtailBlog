@@ -67,20 +67,19 @@ class BlogDetail(Page):
 
     body = StreamField(
         [
+            ("faq", custom_blocks.FAQListBlock()),
+            ('author_profile', SnippetChooserBlock('blogpages.Author')),
+            ("carousel", custom_blocks.CarouselBlock()),
+            ("call_to_action_1", custom_blocks.CallToActionBlock()),
             ('page', blocks.PageChooserBlock(
                 required=False,
-                page_type="home.HomePage"
+                page_type="home.HomePage",
+                group="Standalone blocks",
             )),
             ("info", custom_blocks.InfoBlock()),
-            ("faq", custom_blocks.FAQListBlock()),
-            ('text', custom_blocks.TextBlock()), 
+            ('text', custom_blocks.TextBlock()),
             ('image', custom_blocks.ImageBlock()),
-            ('document', DocumentChooserBlock()),
-            ('author_profile', SnippetChooserBlock('blogpages.Author')),
-
-            ("carousel", custom_blocks.CarouselBlock()),
-
-            ("call_to_action_1", custom_blocks.CallToActionBlock()),   
+            ('document', DocumentChooserBlock(group="Standalone blocks")),
         ],
         block_counts={
             #"text": {"max_num": 5},
